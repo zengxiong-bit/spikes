@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds" debug="false">
+    <!-- set env -->
+    <property name="APP_NAME" value="app"/>
+    <property name="LOGROOT" value="${log.home}/logs"/>
+    <property name="CALC_BILL_LOGROOT" value="${LOGROOT}/calc_bill"/>
+    <property name="LOG_ROLLING_DIR" value="${LOGROOT}/logarchive"/>
+    
+    <property name="DEBUG_LOG_NAME" value="${APP_NAME}_debug"/>
+    <property name="INFO_LOG_NAME" value="${APP_NAME}_info"/>
+    <property name="WARN_LOG_NAME" value="${APP_NAME}_warn"/>
+    <property name="ERROR_LOG_NAME" value="${APP_NAME}_error"/>
+    <property name="DAY_LOG_NAME" value="${APP_NAME}"/>
+
+    <!-- 性能日志相关 -->
+    <property name="PERF_LOG_NAME" value="${APP_NAME}_perf"/>
+
+    <!-- web log -->
+    <property name="WEB_LOG_NAME" value="${APP_NAME}_web"/>
+
+    <property name="ACCESS_LOG_NAME" value="access"/>
+
+    <!-- 计算标准价相关 -->
+    <property name="CALC_STD_PRICE_LOG_NAME" value="${APP_NAME}_calc_stdprice"/>
+
+    <!-- 未计算标准价 -->
+    <property name="NO_CALC_STDPRICE_LOG_NAME" value="${APP_NAME}_no_calc_stdprice"/>
+
+    <!-- 账单计算 -->
+    <property name="CALC_BILL_LOG_NAME" value="${APP_NAME}_calc_bill"/>
+
+    <property name="LOG_PATTERN_CONSOLE"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c:%L] [%thread] [%X{TT}] [%X{traceId}] %m%n"/>
+
+    <property name="LOG_PATTERN_FILE"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c:%L] [%thread] [%X{TT}] [%X{traceId}] %m%n"/>
+
+    <property name="CALC_BILL_LOG_PATTERN_FILE" value="[%X{TT}] [%X{traceId}] %m%n"/>
+
+    <property name="MAXHISTORY" value="3000"/>
+
+    <property name="MAXFILESIZE" value="600MB"/>
+
+    <!-- set context name -->
+    <contextName>${APP_NAME}</contextName>
+
+    <!-- console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- debug level -->
+    <appender name="debug"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- file name -->
+        <File>${LOGROOT}/${DEBUG_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--output file name -->
+            <fileNamePattern>${LOG_ROLLING_DIR}/${DEBUG_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <!-- MAXHISTORY days old files will be delete -->
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- info level -->
+    <appender name="info"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${INFO_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${INFO_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- warn level -->
+    <appender name="warn"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${WARN_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${WARN_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- error level -->
+    <appender name="error"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${ERROR_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${ERROR_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- web -->
+    <appender name="web"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${WEB_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${WEB_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- access -->
+    <appender name="access"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${ACCESS_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${ACCESS_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- perf -->
+    <appender name="perf"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${PERF_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${PERF_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- calc stdprice  -->
+    <appender name="calcStdPrice"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${CALC_STD_PRICE_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${CALC_STD_PRICE_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="noCalcStdPrice"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${NO_CALC_STDPRICE_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${NO_CALC_STDPRICE_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="calcBill"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${CALC_BILL_LOGROOT}/${CALC_BILL_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/calc_bill/${CALC_BILL_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${CALC_BILL_LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 每日输出 -->
+    <appender name="day_log"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOGROOT}/${DAY_LOG_NAME}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_ROLLING_DIR}/${DAY_LOG_NAME}.%d{yyyy-MM-dd}.%i.log.gz
+            </fileNamePattern>
+            <maxHistory>${MAXHISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAXFILESIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${LOG_PATTERN_FILE}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出 -->
+    <appender name="dayLogAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>512</queueSize>
+        <appender-ref ref="day_log"/>
+    </appender>
+
+    <!-- 异步输出 -->
+    <appender name="calcBillLogAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>1024</queueSize>
+        <appender-ref ref="calcBill"/>
+    </appender>
+
+    <!-- spring -->
+    <logger name="org.springframework" level="info"/>
+
+    <!-- druid -->
+    <logger name="druid.sql.DataSource" level="warn"/>
+    <logger name="druid.sql.Connection" level="warn"/>
+    <logger name="druid.sql.Statement" level="warn"/>
+    <logger name="druid.sql.ResultSet" level="warn"/>
+
+    <!-- mybatis -->
+    <logger name="org.apache.ibatis.jdbc.ScriptRunner" level="warn"/>
+    <logger name="org.apache.ibatis" level="warn"/>
+    <logger name="org.mybatis" level="warn"/>
+    <logger name="java.sql.Connection" level="warn"/>
+    <logger name="java.sql.Statement" level="warn"/>
+    <logger name="java.sql.PreparedStatement" level="warn"/>
+    <logger name="java.sql.ResultSet" level="warn"/>
+
+    <logger name="com.ksyun.billing" level="info" additivity="false">
+        <appender-ref ref="dayLogAsyncAppender"/>
+        <appender-ref ref="error"/>
+        <appender-ref ref="warn"/>
+    </logger>
+
+    <logger name="perfLogger" level="info" additivity="false">
+        <appender-ref ref="perf"/>
+    </logger>
+
+    <logger name="webLogger" level="info" additivity="false">
+        <appender-ref ref="web"/>
+    </logger>
+
+
+    <logger name="access" level="info" additivity="false">
+        <appender-ref ref="access"/>
+    </logger>
+
+
+    <logger name="noCalcStdPriceLogger" level="info" additivity="false">
+        <appender-ref ref="noCalcStdPrice"/>
+    </logger>
+
+    <logger name="calcBillLogger" level="info" additivity="false">
+        <appender-ref ref="calcBillLogAsyncAppender"/>
+    </logger>
+
+    <logger name="calcStdPriceLogger" level="info" additivity="false">
+        <appender-ref ref="calcStdPrice"/>
+    </logger>
+
+    <logger name="httpLogger" level="info" additivity="false">
+        <appender-ref ref="info"/>
+    </logger>
+
+    <!--log4jdbc -->
+    <logger name="jdbc.connection" level="OFF"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="info"/>
+
+<!--    <logger name="dao" level="debug" additivity="false">-->
+<!--        <appender-ref ref="console"/>-->
+<!--    </logger>-->
+
+    <!-- root -->
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="info"/>
+        <appender-ref ref="warn"/>
+        <appender-ref ref="error"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whkj.spikes.dao.ProductDOMapper" >
+  <resultMap id="BaseResultMap" type="com.whkj.spikes.dao.dataobject.ProductDO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.whkj.spikes.dao.dataobject.ProductDO" >
+    insert into product (id, name, stock, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{stock,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.whkj.spikes.dao.dataobject.ProductDO" >
+    update product
+    set name = #{name,jdbcType=VARCHAR},
+      stock = #{stock,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, name, stock, create_time, update_time
+    from product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, stock, create_time, update_time
+    from product
+  </select>
+
+  <select id="listByName1" resultMap="BaseResultMap" >
+    select id, name, stock, create_time, update_time
+    from product
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="listByName2" resultMap="BaseResultMap" >
+    select id, name, stock, create_time, update_time
+    from product
+    where name = ${name}
+  </select>
+</mapper>
